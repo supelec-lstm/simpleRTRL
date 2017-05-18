@@ -111,7 +111,6 @@ long compareDouble(std::vector<Eigen::VectorXd> outputs, std::vector<Eigen::Vect
     diff = outputs.at(outputs.size() - 2) - expectedOutputs.at(outputs.size() - 2);
     for (unsigned long j = 0; j < diff.size(); j++) {
         // if one of the coordinates is <0 there is a transition not predicted
-#warning <0 or >0.1 ???
         if (fabs(diff(j)) > 0.1) {
             transitionPredicted = false;
         }
