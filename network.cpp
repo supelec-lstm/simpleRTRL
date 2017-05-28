@@ -16,7 +16,6 @@ Network::Network(unsigned long inputCount, unsigned long layerCount, unsigned lo
 	this->weights = 0.1 * Eigen::MatrixXd::Random(this->layerCount, this->inputCount + this->layerCount);
 	
 	this->allInputs = Eigen::VectorXd::Zero(this->inputCount + this->layerCount);
-	this->allWeightedInputs = Eigen::VectorXd::Zero(this->layerCount);
 	this->allOutputs = Eigen::VectorXd::Zero(this->layerCount);
 	this->gradients = std::vector<Eigen::MatrixXd>(this->layerCount, Eigen::MatrixXd::Zero(this->layerCount, this->inputCount + this->layerCount));
 	this->newGradients = std::vector<Eigen::MatrixXd>(this->layerCount, Eigen::MatrixXd::Zero(this->layerCount, this->inputCount + this->layerCount));
@@ -30,17 +29,16 @@ void Network::propagate(Eigen::VectorXd inputs) {
 		this->allOutputs,
 		inputs,
 		1.0;
-	this->allWeightedInputs = this->weights * allInputs;
-	this->allOutputs = this->allWeightedInputs.unaryExpr(&sigmoid);
+	this->allOutputs = (this->weights * allInputs).unaryExpr(&sigmoid);
 }
 
 void Network::backpropagate(Eigen::VectorXd expectedOutputs) {
 	double value = 0;
 	Eigen::VectorXd antecedents = this->allOutputs.unaryExpr(&sigmoidDerivative);
 
+// For each weight:
 	for (unsigned long i = 0; i < this->layerCount; i++) {
 		for (unsigned long j = 0; j < this->inputCount + this->layerCount; j++) {
-// For each weight:
 // First: calculate new gradients
 			for (unsigned long k = 0; k < this->layerCount; k++) {
 				value = 0;

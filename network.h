@@ -23,7 +23,6 @@ class Network {
 	
 	Eigen::MatrixXd weights;
 	Eigen::VectorXd allInputs;
-	Eigen::VectorXd allWeightedInputs;
 	Eigen::VectorXd allOutputs;
 	std::vector<Eigen::MatrixXd> gradients;
 	std::vector<Eigen::MatrixXd> newGradients;
@@ -31,7 +30,6 @@ class Network {
 	
 	Network(unsigned long inputCount, unsigned long layerCount, unsigned long outputCount);
 	
-	void batchPropagate(std::vector<Eigen::VectorXd> inputs);
 	void propagate(Eigen::VectorXd inputs);
 	void backpropagate(Eigen::VectorXd expectedOutputs);
 	void updateWeigths();
